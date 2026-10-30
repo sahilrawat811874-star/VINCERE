@@ -1,0 +1,9 @@
+{
+  "name": "Swasthya Healthcare Assistant",
+  "short_name": "Swasthya",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F7F2",
+  "theme_color": "#0B765B",
+  "description": "An offline-first health companion demo"
+}

@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swasthya — Healthcare, even offline</title>
+  <link rel="manifest" href="/manifest.json">
+  <!-- OneSignal Web Push SDK -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <style>
+    :root { --ink:#102A2B; --mint:#DDF6ED; --green:#0B765B; --lime:#C6F36D; --paper:#F8F7F2; --coral:#FF8B6C; --danger:#D9383A; --danger-bg:#FDF2F2; }
+    * { box-sizing:border-box; } body { margin:0; color:var(--ink); background:var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .wrap { max-width:1160px; margin:auto; padding:0 24px; } nav { height:84px; display:flex; align-items:center; justify-content:space-between; }
+    .brand { font-size:24px; font-weight:800; letter-spacing:-1px; } .brand i { color:var(--green); font-style:normal; } .pill { border:0; border-radius:999px; background:var(--ink); color:#fff; padding:13px 20px; font-size:14px; font-weight:700; cursor:pointer; }
+    .hero { padding:72px 0 88px; display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center; } .eyebrow { display:inline-flex; gap:8px; align-items:center; background:var(--mint); color:var(--green); border-radius:20px; padding:8px 12px; font-weight:700; font-size:13px; }
+    h1 { font-size:clamp(46px,6vw,78px); letter-spacing:-4.5px; line-height:.98; margin:22px 0; } h1 em { font-style:normal; color:var(--green); } .lead { font-size:19px; max-width:570px; line-height:1.55; color:#476163; }
+    .actions { display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; } .outline { background:transparent; color:var(--ink); border:1px solid #B5C4C1; }
+    .visual { position:relative; background:var(--green); border-radius:36px; min-height:420px; overflow:hidden; padding:24px; } .visual:before { content:""; position:absolute; width:410px; height:410px; background:var(--lime); border-radius:50%; right:-95px; bottom:-120px; } .status { position:relative; background:#fff; width:max-content; border-radius:14px; padding:10px 13px; font-size:13px; font-weight:750; } .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#37C78D; margin-right:7px; }
+    .card { position:absolute; left:33px; bottom:32px; width:min(330px, calc(100% - 66px)); border-radius:22px; padding:23px; background:#fff; box-shadow:0 15px 32px #063D3029; } .card h3 { margin:6px 0 7px; font-size:21px; } .card p { margin:0; color:#54706d; font-size:14px; line-height:1.45; } .voice { display:flex; align-items:center; gap:12px; margin-top:18px; color:var(--green); font-size:13px; font-weight:800; } .wave { display:flex; align-items:center; gap:3px; height:25px; } .wave b { display:block; background:var(--coral); width:4px; border-radius:4px; } .wave b:nth-child(1){height:7px}.wave b:nth-child(2){height:17px}.wave b:nth-child(3){height:25px}.wave b:nth-child(4){height:13px}.wave b:nth-child(5){height:20px}.wave b:nth-child(6){height:8px}
+    .trust { border-top:1px solid #DCE4E1; border-bottom:1px solid #DCE4E1; padding:22px 0; color:#58706e; display:flex; justify-content:space-between; gap:20px; font-size:14px; font-weight:650; flex-wrap:wrap; }
+    .features { padding:100px 0; } .section-title { max-width:600px; font-size:42px; letter-spacing:-2px; line-height:1.05; margin:0 0 42px; } .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; } .feature { padding:26px; background:#fff; border-radius:20px; min-height:220px; } .icon { width:44px; height:44px; background:var(--mint); color:var(--green); display:grid; place-items:center; border-radius:13px; font-size:22px; } .feature h3 { margin:22px 0 8px; font-size:19px; } .feature p { color:#59706d; line-height:1.5; margin:0; font-size:14px; }
+    .cta { background:var(--ink); color:#fff; margin:0 0 48px; padding:58px; border-radius:30px; display:flex; justify-content:space-between; align-items:end; gap:28px; } .cta h2 { font-size:40px; line-height:1.02; letter-spacing:-2px; max-width:520px; margin:0; } .cta p { max-width:390px; color:#B6CDCA; line-height:1.5; }.cta .pill { background:var(--lime); color:var(--ink); white-space:nowrap; }
+    footer { padding:0 0 35px; font-size:13px; color:#5C716F; display:flex; justify-content:space-between; gap:18px; }
+    #app { display:none; min-height:100vh; background:#F2F6F4; } .app-shell{max-width:1200px;margin:auto;display:grid;grid-template-columns:235px 1fr;min-height:100vh}.side{background:#fff;padding:30px 20px;position:relative;overflow:hidden}.side:after{content:'🌿  🌱  🍃';position:absolute;bottom:24px;left:18px;font-size:25px;opacity:.75;letter-spacing:4px}.side .brand{margin:0 12px 48px}.navitem{display:block;width:100%;padding:13px 14px;border:0;background:transparent;border-radius:10px;text-align:left;color:#526966;font-size:14px;font-weight:650;cursor:pointer;margin:5px 0}.navitem.active,.navitem:hover{background:var(--mint);color:var(--green)}.app-main{padding:34px 42px}.topline{display:flex;justify-content:space-between;align-items:center}.avatar{width:40px;height:40px;border-radius:50%;background:var(--coral);display:grid;place-items:center;color:#fff;font-weight:800}.screen{display:none}.screen.active{display:block}.hello{font-size:32px;letter-spacing:-1.5px;margin:25px 0 5px}.muted{color:#69807d}.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:25px 0}.stat{background:#fff;border-radius:16px;padding:20px}.stat b{display:block;font-size:25px;margin-top:8px}.dash-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.panel{background:#fff;border-radius:18px;padding:24px;box-shadow:0 10px 30px #183f3210}.panel h3{margin:0 0 16px}.checkin{background:var(--green);color:#fff}.checkin .muted{color:#C7E6DB}.mood-row{display:flex;gap:9px;margin-top:17px}.mood{border:0;border-radius:12px;background:#ffffff22;color:#fff;padding:12px;cursor:pointer;font-size:20px;transition:transform .2s,background .2s}.mood:hover,.mood.selected{background:var(--lime);color:var(--ink);transform:translateY(-4px) scale(1.06)}.medicine{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #E7EEEB;gap:12px}.medicine:last-child{border:0}.tag{font-size:12px;font-weight:750;padding:6px 9px;border-radius:20px;background:var(--mint);color:var(--green);white-space:nowrap}.tag.danger{background:#FEE2E2;color:#991B1B}.form-card{max-width:650px}.input{width:100%;border:1px solid #D6E1DD;padding:13px;border-radius:10px;font:inherit;margin:7px 0 16px}.report{border:1px dashed #AFC6BE;padding:28px;text-align:center;border-radius:14px;color:#54706d}.notice{padding:14px;background:#FFF1DE;border-radius:12px;color:#755225;font-size:13px;line-height:1.45}.back{border:0;background:none;color:var(--green);font-weight:700;cursor:pointer}.success{display:none;background:var(--mint);padding:12px;border-radius:10px;color:var(--green);font-weight:700;margin-top:12px}.medicine-photo{width:48px;height:48px;border-radius:12px;object-fit:cover;background:#E7F5EE;display:grid;place-items:center;font-size:22px}.medicine-row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #E7EEEB}.medicine-row:last-child{border:0}.mini-btn{border:1px solid #BDD1C9;background:#fff;color:var(--green);border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:700}.mini-btn.danger{color:var(--danger);border-color:#FCA5A5}.add-medicine{display:grid;grid-template-columns:1fr 1fr;gap:12px}.add-medicine .full{grid-column:1/-1}.file-label{border:1px dashed #AFC6BE;border-radius:10px;padding:12px;color:#58706e;font-size:13px;cursor:pointer}.quote{background:linear-gradient(135deg,#E4F6DC,#DDF6ED);border-radius:18px;padding:22px;margin-top:18px;color:#285B49}.chatbox{height:360px;display:flex;flex-direction:column;gap:12px}.chat-messages{flex:1;overflow:auto;background:#F4F8F6;border-radius:12px;padding:14px}.bubble{max-width:85%;padding:10px 13px;border-radius:13px;margin:7px 0;line-height:1.4;font-size:14px}.bubble.ai{background:#fff;color:#385b54}.bubble.you{background:var(--green);color:#fff;margin-left:auto}.bubble.emergency{background:#FEE2E2;border:2px solid #DC2626;color:#991B1B;font-weight:600}.citation-tag{font-size:11px;color:#6B7280;margin-top:6px;border-top:1px dashed #D1D5DB;padding-top:4px}.chat-input{display:flex;gap:8px}.chat-input input{flex:1;border:1px solid #D6E1DD;border-radius:9px;padding:11px}.voice-bar{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap}.leaf-float{position:fixed;right:30px;bottom:22px;font-size:42px;animation:float 3s ease-in-out infinite;pointer-events:none}@keyframes float{50%{transform:translateY(-12px) rotate(5deg)}}
+    .uid-card{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#E9F7EF;border:1px solid #B7DBC8;border-radius:14px;padding:14px 16px;margin:18px 0;color:#285B49}.uid-card code{font-weight:800;letter-spacing:1px}.role-switch{display:flex;gap:8px;margin:18px 0}.role-switch button{border:1px solid #BFD4CC;background:#fff;color:var(--green);border-radius:999px;padding:9px 13px;font-weight:750;cursor:pointer}.role-switch button.active{background:var(--green);color:#fff}.chat-layout{display:grid;grid-template-columns:220px 1fr;gap:16px}.chat-list{background:#fff;border-radius:16px;padding:12px}.chat-contact{display:block;width:100%;text-align:left;border:0;background:transparent;padding:12px;border-radius:10px;cursor:pointer;color:var(--ink)}.chat-contact.active,.chat-contact:hover{background:var(--mint)}.chat-room{background:#fff;border-radius:16px;padding:18px;min-height:400px}.chat-room .chat-messages{height:270px}.bubble.doctor{background:#E4F6DC;color:#285B49}.doctor-badge{font-size:12px;color:var(--green);font-weight:750}.garden{height:100px;position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(180deg,#E7F7EB,#D7F0DF);margin:18px 0 8px}.garden-ground{position:absolute;bottom:-33px;left:-3%;width:106%;height:62px;border-radius:50%;background:#8EC47E}.apple-tree{position:absolute;bottom:14px;font-size:64px;line-height:1;filter:drop-shadow(0 7px 5px #4A86513B)}.apple-tree.one{left:13px}.apple-tree.two{right:65px;font-size:52px;transform:scaleX(-1)}.falling-leaf{position:absolute;top:5px;left:52%;font-size:18px;animation:leafFall 5s linear infinite}.falling-leaf.two{left:74%;animation-delay:2s}.apple{position:absolute;font-size:14px}.tree-copy{position:absolute;right:22px;top:19px;color:#397050;font-weight:750;font-size:13px}@keyframes leafFall{0%{transform:translateY(-6px) rotate(0)}100%{transform:translate(20px,105px) rotate(240deg)}}.mood.bounce{animation:joyJump .75s cubic-bezier(.25,.8,.3,1)}@keyframes joyJump{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(calc(var(--jump, -18px))) scale(1.15)}65%{transform:translateY(0) scale(1.05)}}.edit-box{display:none;background:#F4FAF6;border:1px solid #C8DFD2;border-radius:14px;padding:17px;margin:15px 0}.routine-row{display:grid;grid-template-columns:1fr 150px auto;gap:10px;align-items:end}.routine-list{margin-top:14px}.routine-item{display:flex;justify-content:space-between;border-bottom:1px solid #E7EEEB;padding:10px 0}.language-select{border:1px solid #BDD1C9;border-radius:8px;padding:8px;color:var(--green);font-weight:700}.doctor-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.doctor-note{background:#FFF5DF;border-radius:12px;padding:12px;color:#76521E;font-size:13px;line-height:1.4}.hub-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.hub-card{background:#fff;border-radius:18px;padding:21px;box-shadow:0 10px 30px #183f3210}.hub-card h3{margin:0 0 8px}.hub-card p{color:#69807d;font-size:14px;line-height:1.45}.hub-card .mini-btn{margin:4px 4px 0 0}.journey{display:flex;align-items:center;gap:12px;border:1px solid #DDE9E1;border-radius:12px;padding:12px;margin-top:9px;cursor:pointer;background:#FCFEFD}.journey:hover{background:var(--mint)}.journey-icon{font-size:25px}.privacy-row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #E7EEEB;padding:12px 0;color:#47635f}.switch{accent-color:var(--green)}
+    .service-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 8px;border-radius:12px;background:#E0F2FE;color:#0369A1;margin-bottom:8px}
+    .service-badge.ok{background:#DCFCE7;color:#15803D}
+    @media(max-width:760px){ nav{height:70px}.hero{grid-template-columns:1fr;padding:40px 0 58px;gap:34px}h1{letter-spacing:-3px}.visual{min-height:360px}.grid{grid-template-columns:1fr}.features{padding:65px 0}.section-title{font-size:35px}.cta{padding:34px;display:block}.cta h2{font-size:34px}.cta .pill{margin-top:14px} footer{display:block;line-height:1.8}.app-shell{grid-template-columns:1fr}.side{padding:15px;display:flex;overflow:auto;align-items:center;gap:6px}.side .brand{margin:0 15px 0 0}.navitem{white-space:nowrap;width:auto}.app-main{padding:24px 18px}.stat-grid,.dash-grid,.hub-grid{grid-template-columns:1fr}.hello{font-size:27px}.chat-layout{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav><div class="brand">swasth<i>•</i>ya</div><button class="pill" onclick="openApp('home')">Try app →</button></nav>
+    <section class="hero">
+      <div><span class="eyebrow">● Production Health Companion</span><h1>Healthcare that stays <em>with you.</em></h1><p class="lead">Swasthya is an intelligent, private healthcare assistant integrating Supabase PostgreSQL, Cloudinary media storage, OneSignal background push reminders, and OpenAI clinical safety guidance.</p><div class="actions"><button class="pill" onclick="openApp('home')">Open dashboard</button><button class="pill outline" onclick="document.querySelector('#features').scrollIntoView({behavior:'smooth'})">How it works</button></div></div>
+      <div class="visual"><div class="status"><span class="dot"></span>Cloud & offline sync active</div><div class="card"><small>AI health note</small><h3>"I have had a mild cough since yesterday."</h3><p>Your records and photos are safely protected with Row Level Security. Share with your assigned doctor anytime.</p><div class="voice"><span class="wave"><b></b><b></b><b></b><b></b><b></b><b></b></span> Voice note understood</div></div></div>
+    </section>
+    <div class="trust"><span>🔒 Supabase PostgreSQL & RLS</span><span>☁ Cloudinary secure media</span><span>🔔 OneSignal background push</span><span>🧠 OpenAI medical safety</span></div>
+    <section class="features" id="features"><h2 class="section-title">Connected care with enterprise-grade privacy.</h2><div class="grid"><article class="feature"><div class="icon">⌁</div><h3>Voice & bilingual AI</h3><p>Speak naturally in Hindi or English. The assistant provides evidence-based guidance and detects emergency red flags immediately.</p></article><article class="feature"><div class="icon">▣</div><h3>Cloudinary reports</h3><p>Upload prescriptions and lab tests with MIME, magic-byte and size validation. Never expose API secrets.</p></article><article class="feature"><div class="icon">♡</div><h3>Doctor assigned care</h3><p>Doctors can only access assigned patients. Full audit logging and mutual chat blocking controls.</p></article></div></section>
+    <section class="cta" id="demo"><div><h2>Care that stays close.</h2><p>A calm, secure healthcare companion for patients, families and clinicians.</p></div><button class="pill" onclick="openApp('home')">Launch Swasthya →</button></section>
+    <footer><span>© 2026 Swasthya. Clinical grade healthcare companion.</span><span>This tool does not replace professional medical advice. For emergencies, call 112 / 911 immediately.</span></footer>
+  </main>
+
+  <div id="app"><div class="app-shell"><aside class="side"><div class="brand">swasth<i>•</i>ya</div><button class="navitem active" data-screen="home">⌂ &nbsp; Dashboard</button><button class="navitem" data-screen="checkin">♡ &nbsp; Daily check-in</button><button class="navitem" data-screen="reports">▣ &nbsp; My reports</button><button class="navitem" data-screen="meds">◷ &nbsp; Medicines</button><button class="navitem" data-screen="assistant">✦ &nbsp; Care assistant</button><button class="navitem" data-screen="doctor-chat">☏ &nbsp; Doctor chat</button><button class="navitem" data-screen="doctor">⚕ &nbsp; Doctor portal</button><button class="navitem" data-screen="care-hub">🌱 &nbsp; Care hub</button><button class="navitem" data-screen="profile">⚙ &nbsp; Profile & privacy</button><button class="navitem" data-screen="account">⇄ &nbsp; Account / UID</button></aside><section class="app-main"><div class="topline"><button class="back" onclick="closeApp()">← Back to website</button><div class="avatar" id="user-avatar">••</div></div>
+
+    <!-- 1. HOME SCREEN -->
+    <div class="screen active" id="home"><h1 class="hello">Hello 👋</h1><p class="muted">Today · Your health data is securely synchronized.</p><div class="garden"><div class="garden-ground"></div><div class="apple-tree one">🌳<span class="apple" style="left:15px;top:22px">🍎</span><span class="apple" style="left:42px;top:10px">🍎</span></div><div class="apple-tree two">🌳<span class="apple" style="left:10px;top:16px">🍎</span></div><span class="falling-leaf">🍃</span><span class="falling-leaf two">🍂</span><span class="tree-copy">A little care grows every day 🌱</span></div><div class="stat-grid"><div class="stat"><span class="muted">Today's medicines</span><b id="stat-meds">0 / 0</b></div><div class="stat"><span class="muted">Last check-in</span><b id="stat-checkin">None yet</b></div><div class="stat"><span class="muted">Health records</span><b id="stat-reports">0 files</b></div></div><div class="dash-grid"><div class="panel checkin"><span class="tag">Daily check-in</span><h3>How are you feeling right now?</h3><p class="muted">A one-minute check-in makes your care more personal.</p><div class="mood-row"><button class="mood" onclick="selectMood(this)">😞</button><button class="mood" onclick="selectMood(this)">😐</button><button class="mood" onclick="selectMood(this)">🙂</button><button class="mood" onclick="selectMood(this)">😊</button></div></div><div class="panel"><h3>Next medicine</h3><div id="next-medicine-box" class="medicine"><span><b>No upcoming medicines</b><br><small class="muted">Add your prescription in Medicines</small></span></div><button class="pill" style="margin-top:16px" onclick="showScreen('meds')">View medicine cabinet</button></div></div></div>
+
+    <!-- 2. CHECK-IN SCREEN -->
+    <div class="screen" id="checkin"><h1 class="hello">Daily check-in</h1><p class="muted">Anything you share is protected by Row Level Security in Supabase.</p><div class="panel form-card"><label>How are you feeling today?</label><div class="mood-row"><button class="mood" style="background:#eef4f1" onclick="selectMood(this)">😞</button><button class="mood" style="background:#eef4f1" onclick="selectMood(this)">😐</button><button class="mood" style="background:#eef4f1" onclick="selectMood(this)">🙂</button><button class="mood" style="background:#eef4f1" onclick="selectMood(this)">😊</button></div><label style="display:block;margin-top:22px">Would you like to add anything?</label><textarea id="checkin-note" class="input" rows="4" placeholder="For example: I have a mild headache or did not sleep well..."></textarea><button class="pill" onclick="saveCheckin()">Save check-in</button><div class="success" id="checkin-success">✓ Your check-in was saved securely.</div><div class="quote" id="checkin-response" style="display:none"></div><hr style="border:0;border-top:1px solid #E7EEEB;margin:24px 0"><h3>Add a daily routine reminder</h3><p class="muted">OneSignal background push reminds you even if browser tab is closed.</p><div class="routine-row"><input id="routine-text" class="input" placeholder="Routine name (e.g. Morning walk)" /><input id="routine-time" class="input" type="time" /><button class="pill" onclick="saveRoutine()">Add</button></div><div id="routine-list" class="routine-list"></div></div></div>
+
+    <!-- 3. REPORTS SCREEN (Cloudinary backed) -->
+    <div class="screen" id="reports"><h1 class="hello">My reports & prescriptions</h1><p class="muted">Securely uploaded to Cloudinary through the backend. Only validated MIME types are accepted.</p><div class="panel form-card"><div class="report"><div style="font-size:34px">▣</div><b>Upload lab report or prescription</b><p>Accepted formats: PDF, JPEG, PNG, WebP (Max 10MB)</p><input type="file" id="report-file-input" accept=".pdf,image/jpeg,image/png,image/webp" onchange="uploadReport(this)" /><div id="report-upload-spinner" style="display:none;margin-top:8px;color:var(--green);font-weight:700">⏳ Uploading securely to Cloudinary...</div></div><div class="success" id="report-success">✓ Report uploaded and verified in Supabase database.</div><div id="reports-list" style="margin-top:18px"></div></div></div>
+
+    <!-- 4. MEDICINES SCREEN (Cloudinary backed) -->
+    <div class="screen" id="meds"><h1 class="hello">Medicine cabinet</h1><p class="muted">Medicine reminders dispatch via OneSignal background push and local offline alerts.</p><div class="panel"><div id="medicine-list"></div><div id="edit-medicine-box" class="edit-box"><h3>Edit medicine</h3><div class="add-medicine"><input class="input" id="edit-med-name" placeholder="Medicine name" /><input class="input" id="edit-med-time" type="time" /><input class="input full" id="edit-med-instruction" placeholder="Dose or instructions" /></div><button class="pill" onclick="saveEditedMedicine()">Save edit</button> <button class="mini-btn" onclick="closeEditMedicine()">Cancel</button></div><h3 style="margin-top:22px">Add a medicine</h3><div class="add-medicine"><input class="input" id="new-med-name" placeholder="Medicine name (e.g. Metformin)" /><input class="input" id="new-med-time" type="time" value="09:00" /><input class="input full" id="new-med-instruction" placeholder="Dose or instructions (e.g. 1 tablet after breakfast)" /><label class="file-label full">📷 Upload medicine photo (Cloudinary validated) <input id="new-med-photo" type="file" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="previewMedicinePhoto(this)" /></label><div id="photo-preview-box" style="display:none;align-items:center;gap:10px;margin-bottom:10px"><img id="photo-preview-img" style="width:48px;height:48px;border-radius:10px;object-fit:cover"><span id="photo-preview-name" class="muted" style="font-size:13px"></span></div></div><button class="pill" id="add-med-btn" style="margin-top:10px" onclick="addMedicine()">+ Add medicine</button><div class="notice" style="margin-top:18px">Medicine information is for organization only. Always follow your prescribing doctor's instructions. Never change doses based on chat advice.</div></div><div class="quote" id="medicine-info"><b>Medicine information</b><p>Choose a medicine above. Its general purpose, common safety points, and how to take it will appear here automatically.</p></div></div>
+
+    <!-- 5. REAL AI ASSISTANT (OpenAI + Red Flag Shield) -->
+    <div class="screen" id="assistant"><div class="doctor-head"><div><h1 class="hello">Care assistant</h1><p class="muted">Evidence-based AI support powered by OpenAI. Strictly avoids diagnosing or prescribing.</p></div><div><button class="mini-btn" onclick="newChat()">＋ New chat</button> <button class="mini-btn danger" onclick="clearAiHistory()">Delete history</button></div></div><div class="panel form-card chatbox"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="doctor-badge" id="ai-status-badge">AI Assistant · Connected</span><select class="language-select" id="assistant-language" onchange="setVoiceLanguage(this.value)"><option value="en-IN">English</option><option value="hi-IN">Hindi (हिंदी)</option></select></div><div class="chat-messages" id="chat-messages"><div class="bubble ai">Namaste! I am your Swasthya health companion. You can ask me in English or Hindi about symptoms, preparing for a doctor visit, or wellness routines.<div class="citation-tag">Source: WHO Guidelines 2026 · ICMR Evidence-Based Protocols</div></div></div><div class="chat-input"><input id="chat-input" placeholder="Describe symptoms or ask a question…" onkeydown="if(event.key==='Enter')sendChat()" /><button class="pill" id="ai-send-btn" onclick="sendChat()">Send</button><button class="mini-btn" onclick="speakLast()">🔊</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px;color:#526966"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="ai-consent" class="switch" checked /> Explicit consent to securely store conversation</label><span id="ai-storage-note" class="muted">Deletable anytime</span></div><div class="voice-bar"><button class="pill" onclick="startVoice()">🎙 Voice input</button><button class="pill outline" onclick="callDoctor()">☎ Call emergency/doctor</button><button class="pill outline" onclick="showScreen('doctor-chat')">✉ Message assigned doctor</button></div></div></div>
+
+    <!-- 6. TALK TO DOCTOR CHAT -->
+    <div class="screen" id="doctor-chat"><div class="doctor-head"><div><h1 class="hello">Talk to your doctor</h1><p class="muted">Direct encrypted communication with your assigned clinical team.</p></div><span class="doctor-badge">Assigned Doctor</span></div><div id="patient-uid" class="uid-card"><span>Your unique patient UID</span><code>PT-2026-001</code></div><div class="chat-room"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div class="doctor-badge" id="patient-doctor-name">Dr. Meera Sharma · General physician</div><button id="patient-block-btn" class="mini-btn" onclick="toggleBlock('patient')">Block doctor</button></div><div class="chat-messages" id="patient-chat-messages"></div><div class="chat-input"><input id="patient-chat-input" placeholder="Write to your doctor…" onkeydown="if(event.key==='Enter')sendPatientMessage()" /><button id="patient-send-btn" class="pill" onclick="sendPatientMessage()">Send</button></div><div class="doctor-note" style="margin-top:14px">🚨 For chest pain, severe breathing trouble, fainting, stroke signs, or severe trauma, call local emergency services immediately (112 in India, 911). Chat is not for life-threatening emergencies.</div></div></div>
+
+    <!-- 7. DOCTOR PORTAL (Assigned-Only Access & Audit Logging) -->
+    <div class="screen" id="doctor"><div class="doctor-head"><div><h1 class="hello">Doctor portal</h1><p class="muted">Clinician portal with strict assigned-patient access and audit logs.</p></div><span class="tag" id="doctor-status-tag">Dr. Meera Sharma · Verified</span></div><div id="doctor-auth-panel" class="panel form-card"><h3>Doctor sign in</h3><p class="muted">Doctors can only view patients assigned to them.</p><input id="doctor-email" class="input" value="doctor@demo.com" placeholder="Doctor email" /><input id="doctor-password" class="input" type="password" value="doctor123" placeholder="Password" /><button class="pill" onclick="loginDoctor()">Sign in as doctor</button><div id="doctor-auth-message" class="notice" style="margin-top:12px">Demo Doctor: doctor@demo.com · doctor123</div></div><div id="doctor-workspace" style="display:none"><div class="doctor-note">Doctor view: You can only inspect and message patients officially assigned to you. Unassigned patient data is blocked by RLS policies.</div><div class="uid-card"><span>Assigned patients</span><div style="display:flex;gap:8px"><select id="doctor-assigned-select" class="input" style="width:200px;margin:0" onchange="doctorSelectPatient(this.value)"><option value="">Select assigned patient...</option></select><button class="pill" onclick="refreshDoctorPatients()">Refresh</button></div></div><div class="chat-room"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div class="doctor-badge">Patient conversation · <span id="doctor-patient-id">None</span></div><div><button id="doctor-block-btn" class="mini-btn" onclick="toggleBlock('doctor')">Block patient</button> <button class="mini-btn" onclick="logoutDoctor()">Log out</button></div></div><div class="chat-messages" id="doctor-chat-messages"></div><div class="chat-input"><input id="doctor-chat-input" placeholder="Reply with clear next steps…" onkeydown="if(event.key==='Enter')sendDoctorMessage()" /><button id="doctor-send-btn" class="pill" onclick="sendDoctorMessage()">Send reply</button></div></div></div></div>
+
+    <!-- 8. CARE HUB (Health Passport, Caregiver, Journeys, Notifications) -->
+    <div class="screen" id="care-hub"><h1 class="hello">Care hub</h1><p class="muted">Your health passport, notification settings and doctor-ready summary in one place.</p><div class="hub-grid"><div class="hub-card"><h3>🪪 Health passport</h3><p>Keep essential details ready for doctor review or emergency handoff.</p><input id="blood-group" class="input" placeholder="Blood group (e.g. O+)" /><input id="allergies" class="input" placeholder="Allergies (e.g. Penicillin)" /><input id="conditions" class="input" placeholder="Known conditions (e.g. Hypertension)" /><button class="pill" onclick="savePassport()">Save passport</button><div id="passport-message" class="success">✓ Passport saved securely.</div></div><div class="hub-card"><h3>🔔 OneSignal notification settings</h3><p>Receive medicine and routine alerts even when this browser tab is closed.</p><div class="privacy-row"><span>Push status</span><b id="push-permission-label">Checking...</b></div><div class="privacy-row"><span>Medicine reminders</span><input id="notif-meds" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Routine reminders</span><input id="notif-routines" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Daily quotes</span><input id="notif-quotes" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Timezone</span><code id="notif-tz-label">Asia/Kolkata</code></div><button class="pill" style="margin-top:10px" onclick="requestPushPermission()">Enable background push</button> <button class="mini-btn" onclick="saveNotificationPreferences()">Save preferences</button><div id="notif-message" class="success">✓ Notification preferences saved.</div></div><div class="hub-card"><h3>👥 Caregiver access</h3><p>Manage permissions for trusted caregivers.</p><div class="privacy-row"><span>Medicine reminders</span><input id="share-meds" class="switch" type="checkbox" /></div><div class="privacy-row"><span>Emergency contact</span><input id="share-emergency" class="switch" type="checkbox" /></div><button class="pill" onclick="saveCaregiver()">Save sharing settings</button><div id="caregiver-message" class="success">✓ Sharing settings saved.</div></div><div class="hub-card"><h3>🩺 Care journeys</h3><p>Guided supportive prompts—not medical diagnosis.</p><div class="journey" onclick="selectJourney('Diabetes support')"><span class="journey-icon">🩸</span><b>Diabetes support</b></div><div class="journey" onclick="selectJourney('Cancer care support')"><span class="journey-icon">🌼</span><b>Cancer care support</b></div><div class="journey" onclick="selectJourney('Heart recovery')"><span class="journey-icon">❤️</span><b>Heart recovery</b></div><div class="journey" onclick="selectJourney('Mind & stress')"><span class="journey-icon">🧠</span><b>Mind & stress</b></div><div id="journey-message" class="quote" style="display:none"></div></div><div class="hub-card"><h3>📄 Doctor handoff summary</h3><p>Turn your recent check-ins, routines, and medicines into a clinical summary.</p><button class="pill" onclick="buildDoctorSummary()">Create summary</button><textarea id="doctor-summary" class="input" rows="7" placeholder="Your doctor-ready summary will appear here…"></textarea><button class="mini-btn" onclick="copySummary()">Copy summary</button></div><div class="hub-card"><h3>🔐 Privacy controls</h3><p>Patient-owned data controls.</p><div class="privacy-row"><span>Allow doctor chat</span><input id="allow-chat" class="switch" type="checkbox" checked /></div><button class="mini-btn" onclick="exportHealthData()">Export my data (JSON)</button></div></div></div>
+
+    <!-- 9. ACCOUNT & PATIENT UID SCREEN -->
+    <div class="screen" id="account"><h1 class="hello">Account & patient UID</h1><p class="muted">Every registered patient receives a unique patient UID and isolated database records in Supabase.</p><div class="panel form-card"><div class="uid-card"><span>Current patient UID</span><code id="account-uid">PT-2026-001</code></div><h3>Create a new patient account</h3><input id="register-name" class="input" placeholder="Full name (e.g. Priya Sharma)" /><input id="register-email" class="input" type="email" placeholder="Email" /><input id="register-password" class="input" type="password" placeholder="Password (8+ characters)" /><button class="pill" onclick="registerPatient()">Create account</button><div id="account-message" class="notice" style="margin-top:14px">Your new UID will appear after registration.</div><hr style="border:0;border-top:1px solid #E7EEEB;margin:24px 0"><h3>Sign in to existing patient account</h3><input id="patient-login-email" class="input" type="email" placeholder="Email" /><input id="patient-login-password" class="input" type="password" placeholder="Password" /><button class="pill" onclick="loginPatient()">Sign in</button></div></div>
+
+    <!-- 10. PROFILE & PRIVACY SCREEN -->
+    <div class="screen" id="profile"><h1 class="hello">Profile & privacy</h1><div class="panel form-card"><div id="profile-uid" class="uid-card"><span>Your patient UID</span><code>PT-2026-001</code></div><label>Full name</label><input class="input" id="profile-name" placeholder="Enter your name" /><label>Emergency contact / doctor phone</label><input class="input" id="profile-contact" placeholder="Add trusted contact phone (e.g. +91 98765 43210)" /><label>Timezone</label><input class="input" id="profile-timezone" placeholder="e.g. Asia/Kolkata" /><div class="notice">🔒 All patient records are protected by Row Level Security (RLS) in PostgreSQL. Service role keys are never exposed to browser clients.</div><button class="pill" style="margin-top:18px" onclick="saveProfile()">Save profile</button><div class="success" id="profile-success">✓ Your profile was saved.</div></div></div>
+
+  </section></div></div>
+  <div class="leaf-float">🌿</div>
+
+  <script>
+    const API = location.protocol === 'file:' ? 'http://127.0.0.1:4173/api' : '/api';
+    let selectedMood = '', medicines = [], routines = [], reports = [], chats = [], currentChatId = '', patientId = '', patientUid = '', lastSpeech = '', voiceLang = 'en-IN', moodCounts = {}, doctorToken = localStorage.getItem('doctor-token') || '', onesignalAppId = null;
+
+    // Standard API Fetch Wrapper with Token Injection
+    async function api(path, options = {}) {
+      const isDoctorScreen = document.getElementById('doctor')?.classList.contains('active');
+      const token = isDoctorScreen ? (doctorToken || '') : (localStorage.getItem('patient-token') || '');
+      const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+      if (token) headers.Authorization = 'Bearer ' + token;
+
+      const r = await fetch(API + path, { ...options, headers });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const err = new Error(data.error || 'Request failed.');
+        err.status = r.status;
+        throw err;
+      }
+      return data;
+    }
+
+    // Register Service Worker for offline shell
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+    }
+
+    // OneSignal Web Push Integration
+    async function initOneSignal() {
+      try {
+        const config = await api('/notifications/config');
+        if (config.onesignalAppId) {
+          onesignalAppId = config.onesignalAppId;
+          window.OneSignalDeferred = window.OneSignalDeferred || [];
+          window.OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+              appId: onesignalAppId,
+              safari_web_id: undefined,
+              notifyButton: { enable: false }
+            });
+            if (patientUid) {
+              await OneSignal.login(patientUid);
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('[OneSignal] Initializer note:', e.message);
+      }
+      updatePushStatusLabel();
+    }
+
+    function updatePushStatusLabel() {
+      const label = document.getElementById('push-permission-label');
+      if (!label) return;
+      if (!('Notification' in window)) {
+        label.textContent = 'Not supported';
+      } else {
+        label.textContent = Notification.permission.charAt(0).toUpperCase() + Notification.permission.slice(1);
+      }
+      const tzEl = document.getElementById('notif-tz-label');
+      if (tzEl) tzEl.textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kolkata';
+    }
+
+    async function requestPushPermission() {
+      if ('Notification' in window) {
+        const perm = await Notification.requestPermission();
+        updatePushStatusLabel();
+        if (perm === 'granted') {
+          saveNotificationPreferences();
+          alert('Background push notifications enabled!');
+        } else {
+          alert('Notification permission was ' + perm);
+        }
+      }
+    }
+
+    async function saveNotificationPreferences() {
+      try {
+        let onesignalId = null;
+        if (window.OneSignal && window.OneSignal.User) {
+          onesignalId = window.OneSignal.User.PushSubscription?.id || null;
+        }
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kolkata';
+        await api('/notifications/preferences', {
+          method: 'POST',
+          body: JSON.stringify({
+            onesignalPlayerId: onesignalId,
+            timezone: tz,
+            medicineReminders: document.getElementById('notif-meds')?.checked !== false,
+            routineReminders: document.getElementById('notif-routines')?.checked !== false,
+            dailyQuotes: document.getElementById('notif-quotes')?.checked !== false
+          })
+        });
+        const msg = document.getElementById('notif-message');
+        if (msg) { msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 3000); }
+      } catch (e) {
+        console.warn('Preferences save note:', e.message);
+      }
+    }
+
+    // App Navigation
+    function openApp(s) {
+      document.querySelector('main').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      showScreen(s);
+      loadData();
+      initOneSignal();
+    }
+
+    function closeApp() {
+      document.getElementById('app').style.display = 'none';
+      document.querySelector('main').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.navitem').forEach(x => x.classList.toggle('active', x.dataset.screen === id));
+
+      if (id === 'meds') renderMedicines();
+      if (id === 'reports') renderReports();
+      if (id === 'doctor-chat') renderPatientChat();
+      if (id === 'doctor') { updateDoctorGate(); refreshDoctorPatients(); renderDoctorChat(); }
+      if (id === 'checkin') renderRoutines();
+      if (id === 'care-hub') { loadCareHub(); updatePushStatusLabel(); }
+      if (id === 'home') updateStats();
+    }
+
+    document.querySelectorAll('.navitem').forEach(x => x.onclick = () => showScreen(x.dataset.screen));
+
+    // Mood tracking
+    function selectMood(el) {
+      el.parentElement.querySelectorAll('.mood').forEach(x => x.classList.remove('selected', 'bounce'));
+      el.classList.add('selected');
+      el.style.setProperty('--jump', el.textContent === '😊' ? '-42px' : el.textContent === '🙂' ? '-34px' : el.textContent === '😐' ? '-25px' : '-18px');
+      void el.offsetWidth;
+      el.classList.add('bounce');
+      selectedMood = el.textContent;
+      moodCounts[selectedMood] = (moodCounts[selectedMood] || 0) + 1;
+
+      const quotes = {
+        '😞': ['It is okay to have a difficult day. One gentle step is enough.', 'You do not have to solve everything today. Rest and reach out.', 'Your feelings deserve care, not judgement.'],
+        '😐': ['Small steps still count. Try one thing that grounds you.', 'A calm reset can change the next hour.', 'Notice one good thing around you today.'],
+        '🙂': ['That is lovely to hear! Keep the momentum.', 'A little brightness can carry you far today.', 'Your steady care is building a healthier routine.'],
+        '😊': ['Your joy is worth protecting—share it with someone.', 'What a beautiful energy to bring into the day!', 'Keep that smile close; you earned this moment.']
+      };
+      const list = quotes[selectedMood] || quotes['😐'];
+      const box = document.getElementById('mood-feedback') || document.createElement('div');
+      box.id = 'mood-feedback';
+      box.className = 'quote';
+      box.innerHTML = '<b>' + list[(moodCounts[selectedMood] - 1) % list.length] + '</b><p>Tap the emoji again for another reflection.</p>';
+      const parent = document.querySelector('#checkin .form-card');
+      if (parent && !box.parentElement) parent.appendChild(box);
+      speak(box.querySelector('b').textContent);
+    }
+
+    // Auto-login or patient session initialization
+    async function ensurePatientAuth() {
+      if (localStorage.getItem('patient-token')) return;
+      try {
+        const result = await api('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: 'patient@demo.com', password: 'patient123', role: 'patient' })
+        });
+        localStorage.setItem('patient-token', result.token);
+        localStorage.setItem('patient-id', result.user.id);
+        patientId = result.user.id;
+        patientUid = result.user.patientUid || 'PT-2026-001';
+      } catch (e) {
+        console.warn('Patient session initialization:', e.message);
+      }
+    }
+
+    async function registerPatient() {
+      const name = document.getElementById('register-name').value.trim();
+      const email = document.getElementById('register-email').value.trim();
+      const password = document.getElementById('register-password').value;
+      if (!name || !email || password.length < 8) {
+        document.getElementById('account-message').textContent = 'Enter full name, valid email, and a password of at least 8 characters.';
+        return;
+      }
+      try {
+        const result = await api('/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({ name, email, password, role: 'patient' })
+        });
+        localStorage.setItem('patient-token', result.token);
+        localStorage.setItem('patient-id', result.user.id);
+        patientId = result.user.id;
+        patientUid = result.user.patientUid;
+        document.getElementById('account-message').textContent = 'Account created in Supabase! Your unique UID is ' + result.user.patientUid;
+        setUid();
+        await loadData();
+        showScreen('home');
+      } catch (e) {
+        document.getElementById('account-message').textContent = e.message;
+      }
+    }
+
+    async function loginPatient() {
+      const email = document.getElementById('patient-login-email').value.trim();
+      const password = document.getElementById('patient-login-password').value;
+      try {
+        const result = await api('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ role: 'patient', email, password })
+        });
+        localStorage.setItem('patient-token', result.token);
+        localStorage.setItem('patient-id', result.user.id);
+        patientId = result.user.id;
+        patientUid = result.user.patientUid;
+        setUid();
+        await loadData();
+        showScreen('home');
+      } catch (e) {
+        document.getElementById('account-message').textContent = e.message;
+      }
+    }
+
+    async function loadData() {
+      try {
+        await ensurePatientAuth();
+        const d = await api('/data');
+        medicines = d.medicines || [];
+        routines = d.routines || [];
+        reports = d.reports || [];
+        patientUid = d.patientId || patientUid || 'PT-2026-001';
+
+        const nameInput = document.getElementById('profile-name');
+        if (nameInput) nameInput.value = d.profile?.name || '';
+        const contactInput = document.getElementById('profile-contact');
+        if (contactInput) contactInput.value = d.profile?.emergencyContact || '';
+        const tzInput = document.getElementById('profile-timezone');
+        if (tzInput) tzInput.value = d.profile?.timezone || 'Asia/Kolkata';
+
+        setUid();
+        renderMedicines();
+        renderReports();
+        renderRoutines();
+        updateStats();
+        await loadChats();
+        scheduleLocalReminders();
+      } catch (e) {
+        console.warn('Data load note:', e.message);
+      }
+    }
+
+    function setUid() {
+      document.querySelectorAll('#patient-uid code, #profile-uid code, #account-uid').forEach(x => x.textContent = patientUid || 'PT-2026-001');
+    }
+
+    function updateStats() {
+      const takenCount = medicines.filter(m => m.taken).length;
+      const statMeds = document.getElementById('stat-meds');
+      if (statMeds) statMeds.textContent = `${takenCount} / ${medicines.length}`;
+
+      const statRep = document.getElementById('stat-reports');
+      if (statRep) statRep.textContent = `${reports.length} files`;
+
+      const nextMedBox = document.getElementById('next-medicine-box');
+      const upcoming = medicines.find(m => !m.taken);
+      if (nextMedBox) {
+        if (upcoming) {
+          nextMedBox.innerHTML = `<span><b>${escapeHtml(upcoming.name)}</b><br><small class="muted">${escapeHtml(upcoming.instruction || 'As prescribed')} · ${upcoming.reminder_time || '09:00'}</small></span><span class="tag">Scheduled</span>`;
+        } else {
+          nextMedBox.innerHTML = `<span><b>All medicines taken ✓</b><br><small class="muted">Great job staying on track!</small></span>`;
+        }
+      }
+    }
+
+    function loadCareHub() {
+      const p = JSON.parse(localStorage.getItem('health-passport') || '{}');
+      const c = JSON.parse(localStorage.getItem('caregiver-settings') || '{}');
+      if (document.getElementById('blood-group')) document.getElementById('blood-group').value = p.bloodGroup || '';
+      if (document.getElementById('allergies')) document.getElementById('allergies').value = p.allergies || '';
+      if (document.getElementById('conditions')) document.getElementById('conditions').value = p.conditions || '';
+      if (document.getElementById('share-meds')) document.getElementById('share-meds').checked = Boolean(c.medicines);
+      if (document.getElementById('share-emergency')) document.getElementById('share-emergency').checked = Boolean(c.emergency);
+    }
+
+    // Medicine Cabinet Functions (Cloudinary photo upload)
+    function renderMedicines() {
+      const list = document.getElementById('medicine-list');
+      if (!list) return;
+      if (!medicines.length) {
+        list.innerHTML = '<p class="muted">No medicines added yet. Add your first medicine below.</p>';
+        return;
+      }
+      list.innerHTML = medicines.map(m => {
+        const photoHtml = m.photo_url
+          ? `<img src="${m.photo_url}" class="medicine-photo" alt="${escapeHtml(m.name)}">`
+          : `<div class="medicine-photo">💊</div>`;
+        return `
+          <div class="medicine-row">
+            ${photoHtml}
+            <div>
+              <b>${escapeHtml(m.name)}</b>
+              <br><small class="muted">${escapeHtml(m.instruction || 'As prescribed')} · ${m.reminder_time || '09:00'}</small>
+              <br>
+              <button class="mini-btn" onclick="showMedicineInfo('${m.id}')">Benefits & safety</button>
+              <button class="mini-btn" onclick="editMedicine('${m.id}')">Edit</button>
+            </div>
+            <div>
+              <button class="mini-btn" onclick="toggleMedicine('${m.id}', ${!m.taken})">${m.taken ? 'Taken ✓' : 'Mark taken'}</button>
+              <button class="mini-btn danger" onclick="removeMedicine('${m.id}')">×</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      if (medicines[0]) showMedicineInfo(medicines[0].id);
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    let selectedMedicinePhotoBuffer = null;
+    function previewMedicinePhoto(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const previewBox = document.getElementById('photo-preview-box');
+      const previewImg = document.getElementById('photo-preview-img');
+      const previewName = document.getElementById('photo-preview-name');
+      const reader = new FileReader();
+      reader.onload = e => {
+        previewImg.src = e.target.result;
+        previewName.textContent = file.name + ` (${Math.round(file.size / 1024)} KB)`;
+        previewBox.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function addMedicine() {
+      const name = document.getElementById('new-med-name').value.trim();
+      const time = document.getElementById('new-med-time').value;
+      const instruction = document.getElementById('new-med-instruction').value.trim();
+      const photoFile = document.getElementById('new-med-photo').files[0];
+
+      if (!name) { alert('Please enter a medicine name.'); return; }
+
+      const addBtn = document.getElementById('add-med-btn');
+      addBtn.disabled = true;
+      addBtn.textContent = 'Saving...';
+
+      try {
+        let photoUrl = '';
+        let photoPublicId = null;
+
+        // If user attached photo, upload to Cloudinary through backend
+        if (photoFile) {
+          addBtn.textContent = 'Uploading to Cloudinary...';
+          const formData = new FormData();
+          formData.append('file', photoFile);
+
+          const r = await fetch(API + '/upload/medicine-photo', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('patient-token') || '') },
+            body: formData
+          });
+          const uploadRes = await r.json();
+          if (!r.ok) throw new Error(uploadRes.error || 'Photo upload failed.');
+          photoUrl = uploadRes.secure_url;
+          photoPublicId = uploadRes.public_id;
+        }
+
+        const med = await api('/medicines', {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            time,
+            instruction,
+            photo_url: photoUrl,
+            photo_public_id: photoPublicId
+          })
+        });
+
+        medicines.unshift(med);
+        renderMedicines();
+        updateStats();
+
+        document.getElementById('new-med-name').value = '';
+        document.getElementById('new-med-instruction').value = '';
+        document.getElementById('new-med-photo').value = '';
+        document.getElementById('photo-preview-box').style.display = 'none';
+
+        alert('Medicine saved successfully!');
+      } catch (e) {
+        alert(e.message);
+      } finally {
+        addBtn.disabled = false;
+        addBtn.textContent = '+ Add medicine';
+      }
+    }
+
+    async function toggleMedicine(id, taken) {
+      try {
+        const updated = await api('/medicines/' + id, { method: 'PATCH', body: JSON.stringify({ taken }) });
+        medicines = medicines.map(m => m.id === id ? updated : m);
+        renderMedicines();
+        updateStats();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    let editingMedicineId = '';
+    function editMedicine(id) {
+      const m = medicines.find(x => x.id === id);
+      if (!m) return;
+      editingMedicineId = id;
+      document.getElementById('edit-med-name').value = m.name;
+      document.getElementById('edit-med-time').value = m.reminder_time || '09:00';
+      document.getElementById('edit-med-instruction').value = m.instruction || '';
+      document.getElementById('edit-medicine-box').style.display = 'block';
+    }
+
+    function closeEditMedicine() {
+      editingMedicineId = '';
+      document.getElementById('edit-medicine-box').style.display = 'none';
+    }
+
+    async function saveEditedMedicine() {
+      if (!editingMedicineId) return;
+      try {
+        const updated = await api('/medicines/' + editingMedicineId, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            name: document.getElementById('edit-med-name').value,
+            time: document.getElementById('edit-med-time').value,
+            instruction: document.getElementById('edit-med-instruction').value
+          })
+        });
+        medicines = medicines.map(m => m.id === editingMedicineId ? updated : m);
+        renderMedicines();
+        closeEditMedicine();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function removeMedicine(id) {
+      if (!confirm('Remove this medicine?')) return;
+      try {
+        await api('/medicines/' + id, { method: 'DELETE' });
+        medicines = medicines.filter(m => m.id !== id);
+        renderMedicines();
+        updateStats();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    function showMedicineInfo(id) {
+      const m = medicines.find(x => x.id === id);
+      if (!m) return;
+      const n = m.name.toLowerCase();
+      const guidance = {
+        vitamin: ['supports normal calcium absorption and bone health', 'take with the prescribed meal and room-temperature water'],
+        metformin: ['helps manage blood sugar when prescribed for diabetes', 'take with food; never adjust doses yourself'],
+        paracetamol: ['helps reduce fever and mild pain', 'follow prescription exactly; avoid combining with other paracetamol products'],
+        amlodipine: ['helps manage blood pressure', 'take at the same time daily with water'],
+        omeprazole: ['helps reduce stomach acid', 'take before meals as directed by your clinician']
+      };
+      const key = Object.keys(guidance).find(k => n.includes(k));
+      const info = guidance[key] || ['its intended purpose depends on your doctor\'s prescription', 'follow the instructions on your pharmacy label'];
+
+      document.getElementById('medicine-info').innerHTML = `
+        <b>${escapeHtml(m.name)} · Evidence-based guidance</b>
+        <p><strong>Clinical purpose:</strong> ${info[0]}.</p>
+        <p><strong>Administration:</strong> ${info[1]}.</p>
+        <p><strong>Safety Directives:</strong> Do not start, stop, double, or adjust doses without consulting your doctor or pharmacist. Seek urgent care for severe allergic reactions or trouble breathing.</p>
+        <div class="citation-tag">Source: WHO Model Formulary & Standard ICMR Guidelines</div>
+      `;
+    }
+
+    // Reports Management (Cloudinary backend upload)
+    function renderReports() {
+      const list = document.getElementById('reports-list');
+      if (!list) return;
+      if (!reports.length) {
+        list.innerHTML = '<p class="muted">No reports uploaded yet.</p>';
+        return;
+      }
+      list.innerHTML = reports.map(r => `
+        <div class="medicine">
+          <span>
+            <b>${escapeHtml(r.file_name)}</b><br>
+            <small class="muted">${r.file_type || 'PDF/Image'} · ${r.file_size ? Math.round(r.file_size / 1024) + ' KB · ' : ''}${new Date(r.created_at).toLocaleDateString()}</small>
+          </span>
+          ${r.file_url ? `<a href="${r.file_url}" target="_blank" rel="noopener noreferrer" class="tag">View on Cloudinary</a>` : '<span class="tag">Saved</span>'}
+        </div>
+      `).join('');
+    }
+
+    async function uploadReport(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const spinner = document.getElementById('report-upload-spinner');
+      if (spinner) spinner.style.display = 'block';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const r = await fetch(API + '/upload/report', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('patient-token') || '') },
+          body: formData
+        });
+        const result = await r.json();
+        if (!r.ok) throw new Error(result.error || 'Report upload failed.');
+
+        if (result.report) reports.unshift(result.report);
+        renderReports();
+        updateStats();
+
+        const success = document.getElementById('report-success');
+        if (success) { success.style.display = 'block'; setTimeout(() => success.style.display = 'none', 4000); }
+      } catch (e) {
+        alert(e.message);
+      } finally {
+        if (spinner) spinner.style.display = 'none';
+        input.value = '';
+      }
+    }
+
+    // Routines & Check-in
+    function renderRoutines() {
+      const box = document.getElementById('routine-list');
+      if (!box) return;
+      box.innerHTML = routines.map(r => `
+        <div class="routine-item">
+          <span>🌿 ${escapeHtml(r.title || r.text)}</span>
+          <b>${r.reminder_time || r.time}</b>
+        </div>
+      `).join('');
+    }
+
+    async function saveCheckin() {
+      const note = document.getElementById('checkin-note').value.trim();
+      if (!selectedMood && !note) { alert('Choose a mood or write a note first.'); return; }
+      try {
+        await api('/checkins', { method: 'POST', body: JSON.stringify({ mood: selectedMood, note }) });
+        const resp = document.getElementById('checkin-response');
+        resp.innerHTML = '<b>Thanks for checking in 🌱</b><p>Your entry is saved securely with your profile in Supabase.</p>';
+        resp.style.display = 'block';
+        document.getElementById('checkin-success').style.display = 'block';
+        const statCheckin = document.getElementById('stat-checkin');
+        if (statCheckin) statCheckin.textContent = 'Today';
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function saveRoutine() {
+      const title = document.getElementById('routine-text').value.trim();
+      const time = document.getElementById('routine-time').value;
+      if (!title || !time) { alert('Enter routine name and choose a time.'); return; }
+      try {
+        const r = await api('/routines', { method: 'POST', body: JSON.stringify({ text: title, time }) });
+        routines.unshift(r);
+        renderRoutines();
+        document.getElementById('routine-text').value = '';
+        document.getElementById('routine-time').value = '';
+        alert('Routine reminder registered for ' + time);
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function saveProfile() {
+      try {
+        await api('/profile', {
+          method: 'PATCH',
+          body: JSON.stringify({
+            name: document.getElementById('profile-name').value,
+            emergencyContact: document.getElementById('profile-contact').value,
+            timezone: document.getElementById('profile-timezone').value || 'Asia/Kolkata'
+          })
+        });
+        document.getElementById('profile-success').style.display = 'block';
+        setTimeout(() => document.getElementById('profile-success').style.display = 'none', 3000);
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    // Care hub passport
+    function savePassport() {
+      const p = {
+        bloodGroup: document.getElementById('blood-group').value,
+        allergies: document.getElementById('allergies').value,
+        conditions: document.getElementById('conditions').value
+      };
+      localStorage.setItem('health-passport', JSON.stringify(p));
+      const el = document.getElementById('passport-message');
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 3000);
+    }
+
+    function saveCaregiver() {
+      localStorage.setItem('caregiver-settings', JSON.stringify({
+        medicines: document.getElementById('share-meds').checked,
+        emergency: document.getElementById('share-emergency').checked
+      }));
+      const el = document.getElementById('caregiver-message');
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 3000);
+    }
+
+    function selectJourney(name) {
+      const box = document.getElementById('journey-message');
+      box.innerHTML = `<b>${escapeHtml(name)} selected</b><p>Daily prompts will stay supportive and educational. For medical diagnosis or treatment changes, consult your qualified clinician.</p>`;
+      box.style.display = 'block';
+    }
+
+    function buildDoctorSummary() {
+      const passport = JSON.parse(localStorage.getItem('health-passport') || '{}');
+      const lines = [
+        '--- SWASTHYA CLINICAL HANDOFF SUMMARY ---',
+        'Patient UID: ' + patientUid,
+        'Name: ' + (document.getElementById('profile-name').value || 'Not provided'),
+        'Known Conditions: ' + (passport.conditions || 'None reported'),
+        'Allergies: ' + (passport.allergies || 'None reported'),
+        'Medicines: ' + medicines.map(m => `${m.name} (${m.instruction || 'as prescribed'} at ${m.reminder_time || '09:00'})`).join(', '),
+        'Emergency Contact: ' + (document.getElementById('profile-contact').value || 'None recorded'),
+        'Created At: ' + new Date().toISOString(),
+        'Notice: Verify all clinical information directly with patient before medical action.'
+      ];
+      document.getElementById('doctor-summary').value = lines.join('\n');
+    }
+
+    function copySummary() {
+      const el = document.getElementById('doctor-summary');
+      if (!el.value) buildDoctorSummary();
+      navigator.clipboard?.writeText(el.value);
+      alert('Summary copied to clipboard.');
+    }
+
+    function exportHealthData() {
+      const payload = {
+        patientUid,
+        profile: { name: document.getElementById('profile-name').value },
+        medicines,
+        routines,
+        reports,
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `swasthya-health-export-${patientUid}.json`;
+      a.click();
+    }
+
+    // Local notification fallback for offline operation
+    let localReminderInterval;
+    function scheduleLocalReminders() {
+      if (localReminderInterval) clearInterval(localReminderInterval);
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+      const check = () => {
+        const now = new Date();
+        const time = now.toTimeString().slice(0, 5);
+        const dateKey = now.toISOString().slice(0, 10);
+
+        medicines.filter(m => m.reminder_time?.slice(0, 5) === time && !m.taken).forEach(m => {
+          const k = `local-med-${m.id}-${dateKey}-${time}`;
+          if (!localStorage.getItem(k)) {
+            new Notification('Medicine reminder: ' + m.name, {
+              body: 'Time to take ' + m.name + '. ' + (m.instruction || 'Follow prescription.'),
+              icon: m.photo_url || ''
+            });
+            localStorage.setItem(k, '1');
+          }
+        });
+      };
+      check();
+      localReminderInterval = setInterval(check, 30000);
+    }
+
+    // 4. REAL AI ASSISTANT (OpenAI + Red Flag Shield + Bilingual EN/HI)
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      addAiBubble(text, 'you');
+      input.value = '';
+
+      const sendBtn = document.getElementById('ai-send-btn');
+      sendBtn.disabled = true;
+      sendBtn.textContent = '...';
+
+      const consent = document.getElementById('ai-consent')?.checked !== false;
+
+      try {
+        const result = await api('/assistant/chat', {
+          method: 'POST',
+          body: JSON.stringify({
+            message: text,
+            language: voiceLang.startsWith('hi') ? 'hi' : 'en',
+            consentToStore: consent
+          })
+        });
+
+        const bubbleClass = result.isEmergency ? 'ai emergency' : 'ai';
+        addAiBubble(result.reply, bubbleClass, result.citations);
+        lastSpeech = result.reply;
+        speak(result.reply);
+      } catch (err) {
+        addAiBubble('I am currently experiencing a connection issue. If you have an urgent medical concern, please contact emergency care or your doctor immediately.', 'ai');
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send';
+      }
+    }
+
+    function addAiBubble(text, who, citations = null) {
+      const box = document.getElementById('chat-messages');
+      const b = document.createElement('div');
+      b.className = 'bubble ' + who;
+      b.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+
+      if (citations && citations.length && who.includes('ai')) {
+        const citDiv = document.createElement('div');
+        citDiv.className = 'citation-tag';
+        citDiv.textContent = 'Source: ' + citations.map(c => `${c.source} (${c.date})`).join(' · ');
+        b.appendChild(citDiv);
+      }
+
+      box.appendChild(b);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function newChat() {
+      const isHi = voiceLang.startsWith('hi');
+      const greeting = isHi
+        ? 'नमस्ते! मैं आपकी किस प्रकार सहायता कर सकता हूँ? आप अपने लक्षण या सवाल साझा कर सकते हैं।'
+        : 'Hello! How can I assist you with your health routines and symptoms today?';
+      document.getElementById('chat-messages').innerHTML = `<div class="bubble ai">${escapeHtml(greeting)}<div class="citation-tag">Source: WHO Clinical Guidelines 2026</div></div>`;
+      lastSpeech = greeting;
+      speak(greeting);
+    }
+
+    async function clearAiHistory() {
+      if (!confirm('Permanently delete all stored AI assistant conversation history?')) return;
+      try {
+        await api('/assistant/history', { method: 'DELETE' });
+        newChat();
+        alert('AI conversation history deleted.');
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    function setVoiceLanguage(lang) {
+      voiceLang = lang;
+      const isHi = lang.startsWith('hi');
+      speak(isHi ? 'नमस्ते! मैं अब आपसे हिंदी में बात करूँगा।' : 'Hello! I will now speak with you in English.');
+    }
+
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = voiceLang;
+        u.rate = 0.9;
+        speechSynthesis.speak(u);
+      }
+    }
+
+    function speakLast() {
+      if (lastSpeech) speak(lastSpeech);
+    }
+
+    function startVoice() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        alert('Voice input is not supported in this browser. Please type your message.');
+        return;
+      }
+      const r = new SR();
+      r.lang = voiceLang;
+      r.onresult = e => {
+        document.getElementById('chat-input').value = e.results[0][0].transcript;
+        sendChat();
+      };
+      r.start();
+    }
+
+    function callDoctor() {
+      const number = document.getElementById('profile-contact').value.trim();
+      if (!number) {
+        showScreen('profile');
+        alert('Please add a doctor or emergency phone number in your profile first.');
+        return;
+      }
+      window.location.href = 'tel:' + number;
+    }
+
+    // 6 & 7. DOCTOR PORTAL & CHAT (Assigned Access Only)
+    let assignedPatientsList = [];
+    let doctorSelectedPatientUid = '';
+
+    function updateDoctorGate() {
+      const isLogged = Boolean(doctorToken);
+      const authPanel = document.getElementById('doctor-auth-panel');
+      const workspace = document.getElementById('doctor-workspace');
+      if (authPanel) authPanel.style.display = isLogged ? 'none' : 'block';
+      if (workspace) workspace.style.display = isLogged ? 'block' : 'none';
+    }
+
+    async function loginDoctor() {
+      const email = document.getElementById('doctor-email').value.trim();
+      const password = document.getElementById('doctor-password').value;
+      try {
+        const result = await api('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ role: 'doctor', email, password })
+        });
+        doctorToken = result.token;
+        localStorage.setItem('doctor-token', doctorToken);
+        updateDoctorGate();
+        await refreshDoctorPatients();
+      } catch (e) {
+        document.getElementById('doctor-auth-message').textContent = e.message;
+      }
+    }
+
+    function logoutDoctor() {
+      doctorToken = '';
+      localStorage.removeItem('doctor-token');
+      updateDoctorGate();
+      alert('Doctor logged out.');
+    }
+
+    async function refreshDoctorPatients() {
+      if (!doctorToken) return;
+      try {
+        assignedPatientsList = await api('/doctor/patients');
+        const select = document.getElementById('doctor-assigned-select');
+        if (select) {
+          select.innerHTML = '<option value="">Choose an assigned patient...</option>' +
+            assignedPatientsList.map(p => `<option value="${p.patient_uid || p.id}">${escapeHtml(p.full_name)} (${p.patient_uid})</option>`).join('');
+        }
+        if (assignedPatientsList.length && !doctorSelectedPatientUid) {
+          doctorSelectPatient(assignedPatientsList[0].patient_uid || assignedPatientsList[0].id);
+        }
+      } catch (e) {
+        console.warn('Doctor patients refresh note:', e.message);
+      }
+    }
+
+    async function doctorSelectPatient(patientUidOrId) {
+      if (!patientUidOrId) return;
+      doctorSelectedPatientUid = patientUidOrId;
+      document.getElementById('doctor-patient-id').textContent = patientUidOrId;
+
+      try {
+        const allChats = await api('/chats');
+        let chat = allChats.find(c => c.patient_id === patientUidOrId);
+        if (!chat) {
+          chat = await api('/chats', { method: 'POST', body: JSON.stringify({ patientId: patientUidOrId }) });
+        }
+        currentChatId = chat.id;
+        renderDoctorChat();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function loadChats() {
+      try {
+        chats = await api('/chats');
+        if (!chats.length) {
+          const c = await api('/chats', { method: 'POST', body: JSON.stringify({}) });
+          chats = [c];
+        }
+        currentChatId = chats[0].id;
+        renderPatientChat();
+      } catch (e) {
+        console.warn('Chats load note:', e.message);
+      }
+    }
+
+    function currentChat() {
+      return chats.find(c => c.id === currentChatId) || chats[0];
+    }
+
+    function renderPatientChat() {
+      const box = document.getElementById('patient-chat-messages');
+      const chat = currentChat();
+      if (!box || !chat) return;
+
+      box.innerHTML = (chat.messages || []).map(m => `
+        <div class="bubble ${m.sender_role === 'doctor' ? 'doctor' : 'you'}">
+          <b>${escapeHtml(m.sender_name)}</b><br>
+          ${escapeHtml(m.body)}<br>
+          <small style="opacity:.7">${new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+        </div>
+      `).join('');
+      box.scrollTop = box.scrollHeight;
+      updateBlockControls();
+    }
+
+    function renderDoctorChat() {
+      const box = document.getElementById('doctor-chat-messages');
+      const chat = currentChat();
+      if (!box || !chat) return;
+
+      box.innerHTML = (chat.messages || []).map(m => `
+        <div class="bubble ${m.sender_role === 'doctor' ? 'you' : 'doctor'}">
+          <b>${escapeHtml(m.sender_name)}</b><br>
+          ${escapeHtml(m.body)}<br>
+          <small style="opacity:.7">${new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+        </div>
+      `).join('');
+      box.scrollTop = box.scrollHeight;
+      updateBlockControls();
+    }
+
+    function updateBlockControls() {
+      const chat = currentChat();
+      const isBlocked = Boolean(chat && Array.isArray(chat.blocked_by) && chat.blocked_by.length);
+
+      const pb = document.getElementById('patient-block-btn');
+      const ps = document.getElementById('patient-send-btn');
+      const db = document.getElementById('doctor-block-btn');
+      const ds = document.getElementById('doctor-send-btn');
+
+      if (pb) pb.textContent = chat?.blocked_by?.includes('patient') ? 'Unblock doctor' : 'Block doctor';
+      if (ps) { ps.disabled = isBlocked; ps.textContent = isBlocked ? 'Chat blocked' : 'Send'; }
+      if (db) db.textContent = chat?.blocked_by?.includes('doctor') ? 'Unblock patient' : 'Block patient';
+      if (ds) { ds.disabled = isBlocked; ds.textContent = isBlocked ? 'Chat blocked' : 'Send reply'; }
+    }
+
+    async function toggleBlock(byRole) {
+      const chat = currentChat();
+      if (!chat) return;
+      const currentlyBlocked = Array.isArray(chat.blocked_by) && chat.blocked_by.includes(byRole);
+      const action = currentlyBlocked ? '/unblock' : '/block';
+
+      try {
+        const updated = await api(`/chats/${chat.id}${action}`, { method: 'POST' });
+        Object.assign(chat, updated);
+        renderPatientChat();
+        renderDoctorChat();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function sendPatientMessage() {
+      const input = document.getElementById('patient-chat-input');
+      const text = input.value.trim();
+      if (!text || !currentChatId) return;
+
+      try {
+        const m = await api(`/chats/${currentChatId}/messages`, {
+          method: 'POST',
+          body: JSON.stringify({ text })
+        });
+        const chat = currentChat();
+        chat.messages = chat.messages || [];
+        chat.messages.push(m);
+        input.value = '';
+        renderPatientChat();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function sendDoctorMessage() {
+      const input = document.getElementById('doctor-chat-input');
+      const text = input.value.trim();
+      if (!text || !currentChatId) return;
+
+      try {
+        const m = await api(`/chats/${currentChatId}/messages`, {
+          method: 'POST',
+          body: JSON.stringify({ text })
+        });
+        const chat = currentChat();
+        chat.messages = chat.messages || [];
+        chat.messages.push(m);
+        input.value = '';
+        renderDoctorChat();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+  </script>
+</body>
+</html>

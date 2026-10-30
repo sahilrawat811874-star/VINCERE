@@ -1,0 +1,23 @@
+{
+  "name": "swasthya-healthcare-companion",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Production-integrated healthcare companion with Supabase, Cloudinary, OneSignal, OpenAI, and Render",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/api.test.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "cloudinary": "^2.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.68.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
