@@ -41,7 +41,7 @@
     <footer><span>© 2026 Swasthya. Clinical grade healthcare companion.</span><span>This tool does not replace professional medical advice. For emergencies, call 112 / 911 immediately.</span></footer>
   </main>
 
-  <div id="app"><div class="app-shell"><aside class="side"><div class="brand">swasth<i>•</i>ya</div><button class="navitem active" data-screen="home">⌂ &nbsp; Dashboard</button><button class="navitem" data-screen="checkin">♡ &nbsp; Daily check-in</button><button class="navitem" data-screen="reports">▣ &nbsp; My reports</button><button class="navitem" data-screen="meds">◷ &nbsp; Medicines</button><button class="navitem" data-screen="assistant">✦ &nbsp; Care assistant</button><button class="navitem" data-screen="doctor-chat">☏ &nbsp; Doctor chat</button><button class="navitem" data-screen="doctor">⚕ &nbsp; Doctor portal</button><button class="navitem" data-screen="care-hub">🌱 &nbsp; Care hub</button><button class="navitem" data-screen="profile">⚙ &nbsp; Profile & privacy</button><button class="navitem" data-screen="account">⇄ &nbsp; Account / UID</button></aside><section class="app-main"><div class="topline"><button class="back" onclick="closeApp()">← Back to website</button><div class="avatar" id="user-avatar">••</div></div>
+  <div id="app"><div class="app-shell"><aside class="side"><div class="brand">swasth<i>•</i>ya</div><button class="navitem active" data-screen="home">⌂ &nbsp; Dashboard</button><button class="navitem" data-screen="checkin">♡ &nbsp; Daily check-in</button><button class="navitem" data-screen="reports">▣ &nbsp; My reports</button><button class="navitem" data-screen="meds">◷ &nbsp; Medicines</button><button class="navitem" data-screen="assistant">✦ &nbsp; Care assistant</button><button class="navitem" data-screen="doctor-chat">☏ &nbsp; Doctor chat</button><button class="navitem" data-screen="doctor">⚕ &nbsp; Doctor portal</button><button class="navitem" data-screen="care-hub">🌱 &nbsp; Care hub</button><button class="navitem" data-screen="profile">⚙ &nbsp; Profile & privacy</button><button class="navitem" data-screen="account">⇄ &nbsp; Account / UID</button></aside><section class="app-main"><div class="topline"><button class="back" onclick="closeApp()">← Back to website</button><div style="display:flex;align-items:center;gap:10px"><div id="db-status-pill" class="service-badge" onclick="showScreen('care-hub')" style="cursor:pointer;margin:0" title="Click to view database connection status">🟡 Checking DB...</div><div class="avatar" id="user-avatar">••</div></div></div>
 
     <!-- 1. HOME SCREEN -->
     <div class="screen active" id="home"><h1 class="hello">Hello 👋</h1><p class="muted">Today · Your health data is securely synchronized.</p><div class="garden"><div class="garden-ground"></div><div class="apple-tree one">🌳<span class="apple" style="left:15px;top:22px">🍎</span><span class="apple" style="left:42px;top:10px">🍎</span></div><div class="apple-tree two">🌳<span class="apple" style="left:10px;top:16px">🍎</span></div><span class="falling-leaf">🍃</span><span class="falling-leaf two">🍂</span><span class="tree-copy">A little care grows every day 🌱</span></div><div class="stat-grid"><div class="stat"><span class="muted">Today's medicines</span><b id="stat-meds">0 / 0</b></div><div class="stat"><span class="muted">Last check-in</span><b id="stat-checkin">None yet</b></div><div class="stat"><span class="muted">Health records</span><b id="stat-reports">0 files</b></div></div><div class="dash-grid"><div class="panel checkin"><span class="tag">Daily check-in</span><h3>How are you feeling right now?</h3><p class="muted">A one-minute check-in makes your care more personal.</p><div class="mood-row"><button class="mood" onclick="selectMood(this)">😞</button><button class="mood" onclick="selectMood(this)">😐</button><button class="mood" onclick="selectMood(this)">🙂</button><button class="mood" onclick="selectMood(this)">😊</button></div></div><div class="panel"><h3>Next medicine</h3><div id="next-medicine-box" class="medicine"><span><b>No upcoming medicines</b><br><small class="muted">Add your prescription in Medicines</small></span></div><button class="pill" style="margin-top:16px" onclick="showScreen('meds')">View medicine cabinet</button></div></div></div>
@@ -65,7 +65,7 @@
     <div class="screen" id="doctor"><div class="doctor-head"><div><h1 class="hello">Doctor portal</h1><p class="muted">Clinician portal with strict assigned-patient access and audit logs.</p></div><span class="tag" id="doctor-status-tag">Dr. Meera Sharma · Verified</span></div><div id="doctor-auth-panel" class="panel form-card"><h3>Doctor sign in</h3><p class="muted">Doctors can only view patients assigned to them.</p><input id="doctor-email" class="input" value="doctor@demo.com" placeholder="Doctor email" /><input id="doctor-password" class="input" type="password" value="doctor123" placeholder="Password" /><button class="pill" onclick="loginDoctor()">Sign in as doctor</button><div id="doctor-auth-message" class="notice" style="margin-top:12px">Demo Doctor: doctor@demo.com · doctor123</div></div><div id="doctor-workspace" style="display:none"><div class="doctor-note">Doctor view: You can only inspect and message patients officially assigned to you. Unassigned patient data is blocked by RLS policies.</div><div class="uid-card"><span>Assigned patients</span><div style="display:flex;gap:8px"><select id="doctor-assigned-select" class="input" style="width:200px;margin:0" onchange="doctorSelectPatient(this.value)"><option value="">Select assigned patient...</option></select><button class="pill" onclick="refreshDoctorPatients()">Refresh</button></div></div><div class="chat-room"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div class="doctor-badge">Patient conversation · <span id="doctor-patient-id">None</span></div><div><button id="doctor-block-btn" class="mini-btn" onclick="toggleBlock('doctor')">Block patient</button> <button class="mini-btn" onclick="logoutDoctor()">Log out</button></div></div><div class="chat-messages" id="doctor-chat-messages"></div><div class="chat-input"><input id="doctor-chat-input" placeholder="Reply with clear next steps…" onkeydown="if(event.key==='Enter')sendDoctorMessage()" /><button id="doctor-send-btn" class="pill" onclick="sendDoctorMessage()">Send reply</button></div></div></div></div>
 
     <!-- 8. CARE HUB (Health Passport, Caregiver, Journeys, Notifications) -->
-    <div class="screen" id="care-hub"><h1 class="hello">Care hub</h1><p class="muted">Your health passport, notification settings and doctor-ready summary in one place.</p><div class="hub-grid"><div class="hub-card"><h3>🪪 Health passport</h3><p>Keep essential details ready for doctor review or emergency handoff.</p><input id="blood-group" class="input" placeholder="Blood group (e.g. O+)" /><input id="allergies" class="input" placeholder="Allergies (e.g. Penicillin)" /><input id="conditions" class="input" placeholder="Known conditions (e.g. Hypertension)" /><button class="pill" onclick="savePassport()">Save passport</button><div id="passport-message" class="success">✓ Passport saved securely.</div></div><div class="hub-card"><h3>🔔 OneSignal notification settings</h3><p>Receive medicine and routine alerts even when this browser tab is closed.</p><div class="privacy-row"><span>Push status</span><b id="push-permission-label">Checking...</b></div><div class="privacy-row"><span>Medicine reminders</span><input id="notif-meds" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Routine reminders</span><input id="notif-routines" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Daily quotes</span><input id="notif-quotes" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Timezone</span><code id="notif-tz-label">Asia/Kolkata</code></div><button class="pill" style="margin-top:10px" onclick="requestPushPermission()">Enable background push</button> <button class="mini-btn" onclick="saveNotificationPreferences()">Save preferences</button><div id="notif-message" class="success">✓ Notification preferences saved.</div></div><div class="hub-card"><h3>👥 Caregiver access</h3><p>Manage permissions for trusted caregivers.</p><div class="privacy-row"><span>Medicine reminders</span><input id="share-meds" class="switch" type="checkbox" /></div><div class="privacy-row"><span>Emergency contact</span><input id="share-emergency" class="switch" type="checkbox" /></div><button class="pill" onclick="saveCaregiver()">Save sharing settings</button><div id="caregiver-message" class="success">✓ Sharing settings saved.</div></div><div class="hub-card"><h3>🩺 Care journeys</h3><p>Guided supportive prompts—not medical diagnosis.</p><div class="journey" onclick="selectJourney('Diabetes support')"><span class="journey-icon">🩸</span><b>Diabetes support</b></div><div class="journey" onclick="selectJourney('Cancer care support')"><span class="journey-icon">🌼</span><b>Cancer care support</b></div><div class="journey" onclick="selectJourney('Heart recovery')"><span class="journey-icon">❤️</span><b>Heart recovery</b></div><div class="journey" onclick="selectJourney('Mind & stress')"><span class="journey-icon">🧠</span><b>Mind & stress</b></div><div id="journey-message" class="quote" style="display:none"></div></div><div class="hub-card"><h3>📄 Doctor handoff summary</h3><p>Turn your recent check-ins, routines, and medicines into a clinical summary.</p><button class="pill" onclick="buildDoctorSummary()">Create summary</button><textarea id="doctor-summary" class="input" rows="7" placeholder="Your doctor-ready summary will appear here…"></textarea><button class="mini-btn" onclick="copySummary()">Copy summary</button></div><div class="hub-card"><h3>🔐 Privacy controls</h3><p>Patient-owned data controls.</p><div class="privacy-row"><span>Allow doctor chat</span><input id="allow-chat" class="switch" type="checkbox" checked /></div><button class="mini-btn" onclick="exportHealthData()">Export my data (JSON)</button></div></div></div>
+    <div class="screen" id="care-hub"><h1 class="hello">Care hub</h1><p class="muted">Your health passport, notification settings and doctor-ready summary in one place.</p><div class="hub-grid"><div class="hub-card" id="db-config-card" style="grid-column:1/-1"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><h3 style="margin:0 0 4px">⚡ Supabase Database & Backend Connection</h3><p style="margin:0;color:#69807d;font-size:13px">PostgreSQL database synchronization with Row Level Security & audit logs</p></div><span id="db-badge" class="service-badge">Checking connection...</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px"><div><label style="font-size:12px;font-weight:700;color:#526966">Backend API URL</label><input id="cfg-backend-url" class="input" style="margin:4px 0 10px" placeholder="http://127.0.0.1:4173/api" /><label style="font-size:12px;font-weight:700;color:#526966">Supabase Project URL</label><input id="cfg-supabase-url" class="input" style="margin:4px 0 10px" placeholder="https://your-project.supabase.co" /></div><div><label style="font-size:12px;font-weight:700;color:#526966">Supabase Anon Public Key</label><input id="cfg-supabase-anon" class="input" type="password" style="margin:4px 0 10px" placeholder="eyJhbGciOi..." /><label style="font-size:12px;font-weight:700;color:#526966">Supabase Service Role Key (Backend Only)</label><input id="cfg-supabase-service" class="input" type="password" style="margin:4px 0 10px" placeholder="eyJhbGciOi..." /></div></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="pill" onclick="saveDatabaseConnection()">Connect to Supabase</button><button class="mini-btn" onclick="checkDatabaseStatus()">Test Connection</button><button class="mini-btn" onclick="syncLocalToCloud()">Sync Records to Database</button></div><div id="db-conn-message" class="notice" style="display:none;margin-top:12px"></div></div><div class="hub-card"><h3>🪪 Health passport</h3><p>Keep essential details ready for doctor review or emergency handoff.</p><input id="blood-group" class="input" placeholder="Blood group (e.g. O+)" /><input id="allergies" class="input" placeholder="Allergies (e.g. Penicillin)" /><input id="conditions" class="input" placeholder="Known conditions (e.g. Hypertension)" /><button class="pill" onclick="savePassport()">Save passport</button><div id="passport-message" class="success">✓ Passport saved securely.</div></div><div class="hub-card"><h3>🔔 OneSignal notification settings</h3><p>Receive medicine and routine alerts even when this browser tab is closed.</p><div class="privacy-row"><span>Push status</span><b id="push-permission-label">Checking...</b></div><div class="privacy-row"><span>Medicine reminders</span><input id="notif-meds" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Routine reminders</span><input id="notif-routines" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Daily quotes</span><input id="notif-quotes" class="switch" type="checkbox" checked /></div><div class="privacy-row"><span>Timezone</span><code id="notif-tz-label">Asia/Kolkata</code></div><button class="pill" style="margin-top:10px" onclick="requestPushPermission()">Enable background push</button> <button class="mini-btn" onclick="saveNotificationPreferences()">Save preferences</button><div id="notif-message" class="success">✓ Notification preferences saved.</div></div><div class="hub-card"><h3>👥 Caregiver access</h3><p>Manage permissions for trusted caregivers.</p><div class="privacy-row"><span>Medicine reminders</span><input id="share-meds" class="switch" type="checkbox" /></div><div class="privacy-row"><span>Emergency contact</span><input id="share-emergency" class="switch" type="checkbox" /></div><button class="pill" onclick="saveCaregiver()">Save sharing settings</button><div id="caregiver-message" class="success">✓ Sharing settings saved.</div></div><div class="hub-card"><h3>🩺 Care journeys</h3><p>Guided supportive prompts—not medical diagnosis.</p><div class="journey" onclick="selectJourney('Diabetes support')"><span class="journey-icon">🩸</span><b>Diabetes support</b></div><div class="journey" onclick="selectJourney('Cancer care support')"><span class="journey-icon">🌼</span><b>Cancer care support</b></div><div class="journey" onclick="selectJourney('Heart recovery')"><span class="journey-icon">❤️</span><b>Heart recovery</b></div><div class="journey" onclick="selectJourney('Mind & stress')"><span class="journey-icon">🧠</span><b>Mind & stress</b></div><div id="journey-message" class="quote" style="display:none"></div></div><div class="hub-card"><h3>📄 Doctor handoff summary</h3><p>Turn your recent check-ins, routines, and medicines into a clinical summary.</p><button class="pill" onclick="buildDoctorSummary()">Create summary</button><textarea id="doctor-summary" class="input" rows="7" placeholder="Your doctor-ready summary will appear here…"></textarea><button class="mini-btn" onclick="copySummary()">Copy summary</button></div><div class="hub-card"><h3>🔐 Privacy controls</h3><p>Patient-owned data controls.</p><div class="privacy-row"><span>Allow doctor chat</span><input id="allow-chat" class="switch" type="checkbox" checked /></div><button class="mini-btn" onclick="exportHealthData()">Export my data (JSON)</button></div></div></div>
 
     <!-- 9. ACCOUNT & PATIENT UID SCREEN -->
     <div class="screen" id="account"><h1 class="hello">Account & patient UID</h1><p class="muted">Every registered patient receives a unique patient UID and isolated database records in Supabase.</p><div class="panel form-card"><div class="uid-card"><span>Current patient UID</span><code id="account-uid">PT-2026-001</code></div><h3>Create a new patient account</h3><input id="register-name" class="input" placeholder="Full name (e.g. Priya Sharma)" /><input id="register-email" class="input" type="email" placeholder="Email" /><input id="register-password" class="input" type="password" placeholder="Password (8+ characters)" /><button class="pill" onclick="registerPatient()">Create account</button><div id="account-message" class="notice" style="margin-top:14px">Your new UID will appear after registration.</div><hr style="border:0;border-top:1px solid #E7EEEB;margin:24px 0"><h3>Sign in to existing patient account</h3><input id="patient-login-email" class="input" type="email" placeholder="Email" /><input id="patient-login-password" class="input" type="password" placeholder="Password" /><button class="pill" onclick="loginPatient()">Sign in</button></div></div>
@@ -77,7 +77,10 @@
   <div class="leaf-float">🌿</div>
 
   <script>
-    const API = location.protocol === 'file:' ? 'http://127.0.0.1:4173/api' : '/api';
+    const BACKEND_PORT = 4173;
+    const isLiveServer = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port !== '' && location.port !== String(BACKEND_PORT);
+    const defaultApi = (location.protocol === 'file:' || isLiveServer) ? `http://127.0.0.1:${BACKEND_PORT}/api` : '/api';
+    let API = localStorage.getItem('swasthya-api-url') || defaultApi;
     let selectedMood = '', medicines = [], routines = [], reports = [], chats = [], currentChatId = '', patientId = '', patientUid = '', lastSpeech = '', voiceLang = 'en-IN', moodCounts = {}, doctorToken = localStorage.getItem('doctor-token') || '', onesignalAppId = null;
 
     // Standard API Fetch Wrapper with Token Injection
@@ -95,6 +98,107 @@
         throw err;
       }
       return data;
+    }
+
+    async function checkDatabaseStatus() {
+      const pill = document.getElementById('db-status-pill');
+      const badge = document.getElementById('db-badge');
+      const cfgBackend = document.getElementById('cfg-backend-url');
+      if (cfgBackend) cfgBackend.value = API;
+
+      try {
+        const status = await api('/database/status');
+        const isLive = status.connected;
+        if (pill) {
+          pill.className = isLive ? 'service-badge ok' : 'service-badge';
+          pill.textContent = isLive ? '🟢 Supabase PostgreSQL (Live)' : '🟡 Local Mode (Click to connect)';
+        }
+        if (badge) {
+          badge.className = isLive ? 'service-badge ok' : 'service-badge';
+          badge.textContent = isLive ? `Connected: ${status.url || 'Supabase PostgreSQL'}` : 'Local Isolated Mode';
+        }
+        const cfgUrl = document.getElementById('cfg-supabase-url');
+        if (cfgUrl && !cfgUrl.value && status.url) {
+          cfgUrl.value = status.url;
+        }
+        return status;
+      } catch (err) {
+        if (pill) {
+          pill.className = 'service-badge';
+          pill.textContent = '🔴 Backend Offline (Start server.js)';
+        }
+        if (badge) {
+          badge.className = 'service-badge';
+          badge.textContent = 'Backend Not Reachable at ' + API;
+        }
+      }
+    }
+
+    async function saveDatabaseConnection() {
+      const backendUrlInput = document.getElementById('cfg-backend-url').value.trim();
+      const supabaseUrl = document.getElementById('cfg-supabase-url').value.trim();
+      const supabaseAnonKey = document.getElementById('cfg-supabase-anon').value.trim();
+      const supabaseServiceRoleKey = document.getElementById('cfg-supabase-service').value.trim();
+      const msg = document.getElementById('db-conn-message');
+
+      if (backendUrlInput) {
+        API = backendUrlInput.replace(/\/+$/, '');
+        localStorage.setItem('swasthya-api-url', API);
+      }
+
+      if (!supabaseUrl) {
+        alert('Please enter your Supabase Project URL (e.g. https://your-id.supabase.co)');
+        return;
+      }
+
+      if (msg) {
+        msg.style.display = 'block';
+        msg.textContent = '⏳ Testing connection to Supabase database...';
+      }
+
+      try {
+        const res = await api('/database/connect', {
+          method: 'POST',
+          body: JSON.stringify({ supabaseUrl, supabaseAnonKey, supabaseServiceRoleKey })
+        });
+        if (msg) {
+          msg.textContent = '✓ ' + (res.message || 'Connected to Supabase PostgreSQL database!');
+          msg.style.color = 'var(--green)';
+        }
+        await checkDatabaseStatus();
+        await loadData();
+        alert('Supabase database connected successfully! Records will now synchronize with your cloud PostgreSQL database.');
+      } catch (err) {
+        if (msg) {
+          msg.textContent = '⚠ ' + err.message;
+          msg.style.color = '#B91C1C';
+        }
+        alert('Database connection test failed: ' + err.message);
+      }
+    }
+
+    async function syncLocalToCloud() {
+      const msg = document.getElementById('db-conn-message');
+      if (msg) { msg.style.display = 'block'; msg.textContent = '⏳ Syncing records to Supabase database...'; }
+      try {
+        for (const m of medicines) {
+          if (m.localOnly) {
+            await api('/medicines', { method: 'POST', body: JSON.stringify(m) });
+            m.localOnly = false;
+          }
+        }
+        for (const r of routines) {
+          if (r.localOnly) {
+            await api('/routines', { method: 'POST', body: JSON.stringify(r) });
+            r.localOnly = false;
+          }
+        }
+        if (msg) { msg.textContent = '✓ All records synchronized with Supabase!'; }
+        await checkDatabaseStatus();
+        await loadData();
+      } catch (err) {
+        if (msg) msg.textContent = 'Sync note: ' + err.message;
+      }
     }
 
     // Register Service Worker for offline shell
@@ -182,6 +286,7 @@
       showScreen(s);
       loadData();
       initOneSignal();
+      checkDatabaseStatus();
     }
 
     function closeApp() {
@@ -201,7 +306,7 @@
       if (id === 'doctor-chat') renderPatientChat();
       if (id === 'doctor') { updateDoctorGate(); refreshDoctorPatients(); renderDoctorChat(); }
       if (id === 'checkin') renderRoutines();
-      if (id === 'care-hub') { loadCareHub(); updatePushStatusLabel(); }
+      if (id === 'care-hub') { loadCareHub(); updatePushStatusLabel(); checkDatabaseStatus(); }
       if (id === 'home') updateStats();
     }
 

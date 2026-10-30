@@ -82,6 +82,15 @@ describe('1. Health Check & Service Registry', () => {
     assert.strictEqual(typeof res.body.services.onesignal, 'boolean');
     assert.strictEqual(typeof res.body.services.openai, 'boolean');
   });
+
+  test('GET /api/database/status returns database connection status and table metrics', async () => {
+    const res = await makeRequest('/api/database/status');
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(typeof res.body.connected, 'boolean');
+    assert.ok(res.body.provider, 'Provider should be present');
+    assert.ok(res.body.tables, 'Tables dictionary should be present');
+    assert.strictEqual(typeof res.body.tables.profiles, 'number');
+  });
 });
 
 describe('2. Supabase Auth, Patient UID & Data Isolation', () => {

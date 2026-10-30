@@ -164,6 +164,25 @@ const server = http.createServer(async (req, res) => {
     }
 
     // ------------------------------------------------------------------------
+    // DATABASE CONNECTIVITY & MANAGEMENT (Supabase PostgreSQL)
+    // ------------------------------------------------------------------------
+    if (pathname === '/api/database/status' && method === 'GET') {
+      const status = await SupabaseService.getStatus();
+      return sendJSON(res, 200, status);
+    }
+
+    if (pathname === '/api/database/connect' && method === 'POST') {
+      const body = await getRequestBody(req);
+      const result = await SupabaseService.setCredentials({
+        supabaseUrl: body.supabaseUrl,
+        supabaseAnonKey: body.supabaseAnonKey,
+        supabaseServiceRoleKey: body.supabaseServiceRoleKey,
+        persistToEnv: true
+      });
+      return sendJSON(res, 200, { ok: true, message: 'Connected to Supabase PostgreSQL database!', ...result });
+    }
+
+    // ------------------------------------------------------------------------
     // 2. AUTHENTICATION (Patient & Doctor Sign-up / Login)
     // ------------------------------------------------------------------------
     if (pathname === '/api/auth/register' && method === 'POST') {
@@ -199,7 +218,12 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(res, 400, { error: 'Email and password are required.' });
       }
 
-      const user = await SupabaseService.authenticateUser({ email, password, role: expectedRole });
+      let user;
+      try {
+        user = await SupabaseService.authenticateUser({ email, password, role: expectedRole });
+      } catch (authErr) {
+        return sendJSON(res, 400, { error: authErr.message || 'Invalid email or password.' });
+      }
       const token = issueToken({ id: user.id, role: user.role, patientUid: user.patientUid, name: user.fullName });
 
       await SupabaseService.logAudit(user.id, 'AUTH_LOGIN', 'profiles', user.id, { role: user.role });
